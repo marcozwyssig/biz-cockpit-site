@@ -1,0 +1,517 @@
+<title>Biz-Cockpit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+
+<style>
+  :root {
+    --ground: #edeee9;
+    --surface: #f7f8f4;
+    --ink: #1b2021;
+    --ink-soft: #565e5c;
+    --ink-faint: #858c88;
+    --rule: #c9ccc4;
+    --rule-soft: #dcdfd8;
+    --stamp: #b23a2e;
+    --stamp-soft: rgba(178, 58, 46, 0.10);
+
+    --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+    --measure: 34rem;
+    --gap: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #16191a;
+      --surface: #1e2223;
+      --ink: #e4e7e1;
+      --ink-soft: #9aa29e;
+      --ink-faint: #6f7773;
+      --rule: #333a38;
+      --rule-soft: #262c2b;
+      --stamp: #d6614f;
+      --stamp-soft: rgba(214, 97, 79, 0.14);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #16191a;
+    --surface: #1e2223;
+    --ink: #e4e7e1;
+    --ink-soft: #9aa29e;
+    --ink-faint: #6f7773;
+    --rule: #333a38;
+    --rule-soft: #262c2b;
+    --stamp: #d6614f;
+    --stamp-soft: rgba(214, 97, 79, 0.14);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .sheet {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: clamp(2rem, 5vw, 4.5rem) clamp(1.25rem, 4vw, 3rem) 6rem;
+  }
+
+  /* --- Das Formular-Raster: Feldname links, Inhalt rechts ---------------- */
+  .row {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 0 2.5rem;
+    padding: var(--gap) 0;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .row:first-of-type { border-top: none; }
+
+  @media (max-width: 46rem) {
+    .row { grid-template-columns: minmax(0, 1fr); gap: 0.75rem; }
+  }
+
+  .field {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding-top: 0.45rem;
+  }
+
+  .col { min-width: 0; }
+  .col > * + * { margin-top: 1.1rem; }
+
+  h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+
+  h1 {
+    font-size: clamp(2.4rem, 6.5vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+  }
+
+  h2 {
+    font-size: clamp(1.45rem, 3vw, 1.9rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  h3 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+
+  p { margin: 0; max-width: var(--measure); }
+  .lead { font-size: 1.25rem; line-height: 1.5; color: var(--ink-soft); }
+  .soft { color: var(--ink-soft); }
+
+  /* --- Kopf -------------------------------------------------------------- */
+  .masthead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--ink);
+    flex-wrap: wrap;
+  }
+  .wordmark {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .origin {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+  }
+
+  .hero { padding: clamp(3rem, 8vw, 5.5rem) 0 var(--gap); }
+  .hero p { margin-top: 1.75rem; }
+
+  /* --- Listen ------------------------------------------------------------ */
+  .stack { display: flex; flex-direction: column; gap: 1.75rem; }
+
+  .entry { display: grid; gap: 0.35rem; }
+  .entry p { max-width: 32rem; }
+
+  .pains { display: flex; flex-direction: column; gap: 0; }
+  .pain {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .pain:first-child { border-top: 1px solid var(--rule-soft); }
+  .pain-where {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    text-align: right;
+  }
+
+  /* --- Der Monatsablauf: hier IST die Nummer eine Aussage ---------------- */
+  ol.flow { list-style: none; margin: 0; padding: 0; counter-reset: step; }
+  ol.flow li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    gap: 1.25rem;
+    padding: 1.05rem 0;
+    border-top: 1px solid var(--rule-soft);
+  }
+  ol.flow li::before {
+    content: counter(step, decimal-leading-zero);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--stamp);
+    padding-top: 0.28rem;
+  }
+  ol.flow strong { font-family: var(--display); font-weight: 600; }
+
+  /* --- Der Stempel: das einzige laute Element auf der Seite -------------- */
+  .stamp-wrap { display: flex; justify-content: flex-start; padding-top: 0.5rem; }
+  .stamp {
+    display: inline-block;
+    transform: rotate(-6deg);
+    border: 2px solid var(--stamp);
+    outline: 1px solid var(--stamp);
+    outline-offset: 3px;
+    color: var(--stamp);
+    background: var(--stamp-soft);
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 0.8125rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.1rem 0.45rem;
+  }
+  .stamp span { display: block; font-size: 0.625rem; letter-spacing: 0.16em; opacity: 0.75; }
+
+  /* --- Nicht-Liste ------------------------------------------------------- */
+  ul.plain { list-style: none; margin: 0; padding: 0; }
+  ul.plain li {
+    padding: 0.6rem 0 0.6rem 1.5rem;
+    border-bottom: 1px solid var(--rule-soft);
+    position: relative;
+    max-width: var(--measure);
+  }
+  ul.plain li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--ink-faint);
+  }
+
+  /* --- Kennzahlen des Betriebs ------------------------------------------ */
+  .specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 1.5rem 2rem; }
+  .spec dt {
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.3rem;
+  }
+  .spec dd { margin: 0; font-family: var(--display); font-weight: 500; font-size: 1rem; }
+
+  .note {
+    background: var(--surface);
+    border-left: 2px solid var(--stamp);
+    padding: 1rem 1.25rem;
+    max-width: var(--measure);
+  }
+  .note p { font-size: 0.9375rem; }
+
+  footer {
+    margin-top: var(--gap);
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--ink);
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<div class="sheet">
+
+  <header class="masthead">
+    <div class="wordmark">Biz-Cockpit</div>
+    <div class="origin">Für kleine Unternehmen · selbst betrieben</div>
+  </header>
+
+  <section class="hero">
+    <h1>Die Verwaltung eines kleinen Unternehmens, an einem Ort.</h1>
+    <p class="lead">
+      Zeit, Bestellungen, Nachweise, Belege, Kreditoren, Bankabgleich und Marge —
+      in einem System, das Ihnen gehört und auf Ihrer eigenen Maschine läuft.
+      Kein Abonnement, keine fremde Cloud.
+    </p>
+  </section>
+
+  <div class="row">
+    <div class="field">Warum</div>
+    <div class="col">
+      <h2>Weil die Verwaltung sonst an fünf Orten liegt.</h2>
+      <p>
+        Ein Unternehmen mit fünf Leuten hat dieselben Pflichten wie eines mit
+        fünfhundert: Stunden belegen, Nachweise liefern, Rechnungen stellen,
+        Belege aufbewahren, Zahlungen abgleichen, am Jahresende erklären können,
+        was passiert ist. Es hat nur niemanden, dessen Aufgabe das wäre.
+      </p>
+      <p>
+        Was daraus wird, kennt jedes kleine Unternehmen: die Stunden in einer
+        Tabelle, die Rechnungen in einem Anbieterportal, die Belege im Postfach,
+        der Kontoauszug in der Bank — und der Zusammenhang zwischen alldem im
+        Kopf einer einzigen Person. Es funktioniert, bis diese Person zwei
+        Wochen ausfällt oder jemand fragt, worauf eine Zahl beruht.
+      </p>
+      <div class="pains">
+        <div class="pain"><span>Stunden, nach Kunde und Auftrag getrennt</span><span class="pain-where">Excel</span></div>
+        <div class="pain"><span>Tätigkeitsnachweis für den Kunden</span><span class="pain-where">von Hand</span></div>
+        <div class="pain"><span>Rechnung stellen und verfolgen</span><span class="pain-where">Portal</span></div>
+        <div class="pain"><span>Lieferantenrechnungen und Belege</span><span class="pain-where">Postfach</span></div>
+        <div class="pain"><span>Zahlungen den Rechnungen zuordnen</span><span class="pain-where">E-Banking</span></div>
+        <div class="pain"><span>Was bleibt am Ende übrig?</span><span class="pain-where">Gefühl</span></div>
+      </div>
+      <p>
+        Biz-Cockpit fasst diese sechs Zeilen zu einer zusammen. Nicht als
+        Buchhaltungspaket, sondern als das Stück, das zwischen Ihrer Arbeit und
+        Ihrer Buchhaltung bisher fehlt — und das den Zusammenhang aus dem Kopf
+        auf den Bildschirm holt.
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="field">Was es tut</div>
+    <div class="col">
+      <h2>Sieben Dinge, und sie hängen zusammen.</h2>
+      <div class="stack">
+        <div class="entry">
+          <h3>Zeit erfassen</h3>
+          <p>
+            Von Hand oder im Wochenkalender, je Mitarbeiterin, Kunde und
+            Auftrag — auch Abwesenheiten und Feiertage. Wer Toggl benutzt, holt
+            die Einträge automatisch herein; wer nicht, verliert nichts ausser
+            dem Import.
+          </p>
+        </div>
+        <div class="entry">
+          <h3>Tätigkeitsnachweis</h3>
+          <p>
+            Der monatliche Nachweis für den Kunden entsteht aus den erfassten
+            Stunden, mit seiner Anschrift und seiner Bestellnummer. Als PDF zum
+            Herunterladen — und auf Wunsch direkt per Mail verschickt.
+          </p>
+        </div>
+        <div class="entry">
+          <h3>Bestellungen mit Positionen</h3>
+          <p>
+            Die Bestellung des Kunden ist die Grundlage der Abrechnung: Laufzeit,
+            Stundenansatz, Güter, Währung. Ihr PDF wird abgelegt und ausgelesen,
+            damit Nummer und Zeitraum nicht abgetippt werden müssen.
+          </p>
+        </div>
+        <div class="entry">
+          <h3>Rechnungen vorbereiten</h3>
+          <p>
+            Aus Stunden, Bestellung und Waren wird der Rechnungsentwurf gebaut —
+            nach WBS-Nummern gruppiert, mit Mehrwertsteuer und Fremdwährung. Was
+            abgerechnet ist, ist danach als abgerechnet vermerkt.
+          </p>
+        </div>
+        <div class="entry">
+          <h3>Belege und Kreditoren</h3>
+          <p>
+            Eingehende Rechnungen werden erfasst, ihren Lieferanten zugeordnet und
+            nach der Zahlung gestempelt abgelegt. Der Stempel trägt den Zahltag,
+            nicht den Tag des Druckens.
+          </p>
+        </div>
+        <div class="entry">
+          <h3>Bankabgleich</h3>
+          <p>
+            Der Kontoauszug wird eingelesen und den offenen Rechnungen
+            gegenübergestellt — Eingänge wie Belastungen, auch Teilzahlungen und
+            Sammelgutschriften. Was offen bleibt, bleibt sichtbar.
+          </p>
+        </div>
+        <div class="entry">
+          <h3>Marge</h3>
+          <p>
+            Was bleibt wirklich übrig: Verkaufsseite aus Bestellungen und Stunden,
+            Einkaufsseite aus Lieferanten- und internen Sätzen — je nach
+            Mehrwertsteuermethode netto oder brutto gerechnet, weil das den
+            Unterschied macht.
+          </p>
+        </div>
+      </div>
+      <div class="stamp-wrap">
+        <div class="stamp">Bezahlt<span>06.09.2026</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="field">Der Monat</div>
+    <div class="col">
+      <h2>Ein Monatsabschluss, von der Stunde bis zum Zahlungseingang.</h2>
+      <p class="soft">
+        Der häufigste Ablauf — und der Grund, weshalb die Teile zusammenhängen
+        müssen statt nebeneinander zu liegen.
+      </p>
+      <ol class="flow">
+        <li><div><strong>Stunden stehen fest.</strong> Erfasst oder importiert, jeder Eintrag auf einem Auftrag.</div></li>
+        <li><div><strong>Nachweis geht an den Kunden.</strong> Aus denselben Stunden, mit seiner Anschrift und seiner Bestellnummer.</div></li>
+        <li><div><strong>Rechnung entsteht daraus.</strong> Dieselben Zeilen, gruppiert und bepreist — nichts wird ein zweites Mal getippt.</div></li>
+        <li><div><strong>Der Kunde zahlt.</strong> Der Kontoauszug wird eingelesen, die Zahlung findet ihre Rechnung.</div></li>
+        <li><div><strong>Der Monat ist geschlossen.</strong> Was offen blieb, steht auf der Aufgabenliste — nicht in Ihrem Gedächtnis.</div></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="field">Wofür</div>
+    <div class="col">
+      <h2>Vier Lagen, in denen Sie sich vermutlich wiedererkennen.</h2>
+      <div class="stack">
+        <div class="entry">
+          <h3>„Der Kunde will den Nachweis bis zum Dritten."</h3>
+          <p>
+            Der Nachweis entsteht aus den Stunden, die ohnehin erfasst sind — mit
+            der Bestellnummer, die auf seinem Blatt steht, und der Anschrift, die
+            bei Ihnen hinterlegt ist. Als PDF, jedes Mal gleich gesetzt.
+          </p>
+        </div>
+        <div class="entry">
+          <h3>„Ein Angebot wurde angenommen — und jetzt?"</h3>
+          <p>
+            Die Bestellung des Kunden kommt als PDF. Nummer, Laufzeit und Währung
+            werden daraus gelesen, Dienstleistung und Güter als Positionen erfasst.
+            Ab dann buchen Sie darauf, und am Monatsende rechnet es sich selbst.
+          </p>
+        </div>
+        <div class="entry">
+          <h3>„Wurde diese Lieferantenrechnung eigentlich bezahlt?"</h3>
+          <p>
+            Sie liegt als Beleg im System, ihrem Lieferanten zugeordnet, mit
+            Fälligkeit und Zahltag. Nach dem Bankabgleich trägt sie den Stempel —
+            und die Frage stellt sich nicht mehr.
+          </p>
+        </div>
+        <div class="entry">
+          <h3>„Was verdienen wir an diesem Mitarbeiter wirklich?"</h3>
+          <p>
+            Verkauf gegen Einkauf, je Person und Monat: der verrechnete Satz
+            gegen den eingekauften — bei eigenen Leuten wie bei zugekauften.
+            Mit dem Saldosteuersatz gerechnet sieht dieselbe Marge anders aus
+            als mit der effektiven Methode; das System weiss, welche bei Ihnen
+            gilt.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="field">Betrieb</div>
+    <div class="col">
+      <h2>Ihre Daten bleiben bei Ihnen.</h2>
+      <p>
+        Biz-Cockpit ist kein Abonnement in einer fremden Cloud. Es läuft in
+        Containern auf Ihrer eigenen Maschine oder Ihrem eigenen Server, die
+        Datenbank ist eine Datei, und die Sicherung ist eine Kopie davon.
+      </p>
+      <dl class="specs">
+        <div class="spec"><dt>Betrieb</dt><dd>Docker, eigener Server</dd></div>
+        <div class="spec"><dt>Daten</dt><dd>Eine Datei, Ihre Platte</dd></div>
+        <div class="spec"><dt>Sicherung</dt><dd>Abzug auf Knopfdruck</dd></div>
+        <div class="spec"><dt>Zugang</dt><dd>Nur über VPN</dd></div>
+        <div class="spec"><dt>Sprache</dt><dd>Deutsch, Schweizer Zahlen</dd></div>
+        <div class="spec"><dt>Anbieter</dt><dd>Zuschaltbar, nicht Bedingung</dd></div>
+      </dl>
+      <div class="note">
+        <p>
+          <strong>Zuschaltbar statt vorausgesetzt.</strong> Smallinvoice, Toggl
+          und Microsoft&nbsp;365 lassen sich anschliessen, wenn Sie sie haben.
+          Ohne sie erfassen Sie die Zeit von Hand, laden den Nachweis herunter
+          statt ihn zu verschicken, und alles Übrige bleibt, wie es ist. Kein
+          Bildschirm wird leer, und kein Knopf tut so, als ginge etwas.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="field">Nicht dabei</div>
+    <div class="col">
+      <h2>Was es ausdrücklich nicht tut.</h2>
+      <p class="soft">
+        Damit Sie nicht enttäuscht werden, nachdem Sie es aufgesetzt haben.
+      </p>
+      <ul class="plain">
+        <li><strong>Keine Buchhaltung im engeren Sinn.</strong> Kein Kontenplan, keine Bilanz, kein Abschluss. Das bleibt bei Ihrer Treuhand — Biz-Cockpit liefert ihr geordnete Belege.</li>
+        <li><strong>Kein Mahnwesen.</strong> Der Bankabgleich zeigt die offenen Posten; wer mahnt, sind Sie.</li>
+        <li><strong>Keine Lohnbuchhaltung und keine Steuererklärung.</strong></li>
+        <li><strong>Kein Mehrbenutzerbetrieb und keine Anmeldung.</strong> Biz-Cockpit wird von der Person bedient, welche die Verwaltung führt — nicht von jedem im Betrieb. Genau deshalb steht es hinter dem VPN und nie im offenen Netz.</li>
+        <li><strong>Kein Ersatz für Ihr Anbieterportal</strong>, wenn Sie eines mögen — es wird abgeglichen, nicht verdrängt.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="field">Stand</div>
+    <div class="col">
+      <h2>Im täglichen Gebrauch, und es wächst weiter.</h2>
+      <p>
+        Biz-Cockpit ist kein Entwurf: Zeit, Nachweise, Bestellungen, Belege,
+        Kreditoren, Bankabgleich und Marge sind gebaut und stehen seit Monaten
+        im täglichen Gebrauch eines Schweizer Kleinunternehmens. Woran gerade
+        gearbeitet wird, ist die eigene Debitorenführung — Rechnungen, die
+        Biz-Cockpit selbst stellt und die mit dem Anbieter abgeglichen werden,
+        statt von ihm abzuhängen.
+      </p>
+      <p class="soft">
+        Was hier steht, ist gebaut. Was noch nicht gebaut ist, steht nicht hier.
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    <span>Biz-Cockpit</span>
+    <span>Verwaltung für kleine Unternehmen · selbst betrieben</span>
+  </footer>
+
+</div>
